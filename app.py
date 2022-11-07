@@ -43,6 +43,25 @@ def login():
     username = request.form.get('username')
     password = request.form.get('password')
 
+    return_value = {
+        'status_code': 200,  # 状态码
+        'msg': {
+            'error_msg': '',  # 错误信息
+        }
+    }
+
+    # 如果用户名为空，返回错误信息
+    if not username:
+        return_value['status_code'] = 400
+        return_value['msg']['error_msg'] = '用户名不能为空'
+        return return_value
+
+    # 判断用户名是否满足3-8位
+    if len(username) < 3 or len(username) > 8:
+        return_value['status_code'] = 400
+        return_value['msg']['error_msg'] = '用户名长度不符合要求'
+        return return_value
+
     # 对用户名进行验证
     sql = f"select id from user where username='{username}';"
     with conn.cursor() as cursor:
@@ -137,18 +156,15 @@ def random_poker(num=1):
             [f'♣️{_}' for _ in range(1, 14)] + \
             ['🃏大王', '🃏小王']
 
-    print(poker, '\n', '--' * 50)
-
     # (2. 洗牌
     random.shuffle(poker)
 
     # (3. 抽牌
     cards = [poker.pop() if card in ['🃏大王', '🃏小王'] else card for card in [poker.pop() for _ in range(num)]]
 
-    print(cards, '\n', '--' * 50)
-
     # (4. 计算分数
     score = sum([int(card[2:]) if card[2:] != '🃏大王' and card[2:] != '🃏小王' else 0 for card in cards])
+
     # (5. 返回结果
     return render_template('random_poker.html', cards=cards, score=score, num=num)
 
