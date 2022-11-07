@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+    <title>显示用户信息</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>name</th>
+                <th>age</th>
+                <th>gender</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- {"name":崔昊元, "age":17,'gender':2} -->
+            {% for s in users %}
+                <tr>
+                    <td>{{s['name']}}</td>
+                    <td>{{s['age']}}</td>
+                    <td>{{s['gender']}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
