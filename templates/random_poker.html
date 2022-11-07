@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head>
+    <title>显示抽牌信息</title>
+</head>
+<body>
+<table border="1">
+    <form action='/random_poker' method='POST'>
+        抽牌次数:<label><input name='num'/></label>
+        <button>抽牌</button>
+    </form>
+
+    <tr>
+        <td>抽牌次数</td>
+        <td>抽牌结果</td>
+        <td>抽牌总计</td>
+    </tr>
+    <tr>
+        <td>{{ num }}</td>
+        <td>{{ cards }}</td>
+        <td>{{ score }}</td>
+    </tr>
+</table>
+</body>

@@ -142,15 +142,18 @@ def random_poker(num=1):
             [f'♣️{_}' for _ in range(1, 14)] + \
             ['🃏大王', '🃏小王']
 
+    print(poker, '\n', '--' * 50)
+
     # (2. 洗牌
     random.shuffle(poker)
 
     # (3. 抽牌
     cards = [poker.pop() if card in ['🃏大王', '🃏小王'] else card for card in [poker.pop() for _ in range(num)]]
 
+    print(cards, '\n', '--' * 50)
+
     # (4. 计算分数
     score = sum([int(card[2:]) if card[2:] != '🃏大王' and card[2:] != '🃏小王' else 0 for card in cards])
-
     # (5. 返回结果
     return render_template('random_poker.html', cards=cards, score=score, num=num)
 
