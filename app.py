@@ -58,10 +58,21 @@ def login():
         return_value['msg']['error_msg'] = '用户名不能为空'
         return return_value
 
+    if not password:
+        return_value['status_code'] = 400
+        return_value['msg']['error_msg'] = '密码不能为空'
+        return return_value
+
     # 判断用户名是否满足3-8位
     if len(username) < 3 or len(username) > 8:
         return_value['status_code'] = 400
         return_value['msg']['error_msg'] = '用户名长度不符合要求'
+        return return_value
+
+    # 判断密码是否满足4-18位
+    if len(password) < 4 or len(password) > 18:
+        return_value['status_code'] = 400
+        return_value['msg']['error_msg'] = '密码长度不符合要求'
         return return_value
 
     # 对用户名进行验证
