@@ -32,7 +32,7 @@
 				dataType: 'json',
 				success: function (data) {
 					if (data.status_code == '200') {
-						window.location.href = '/index'
+						alert('登录成功');
 					} else {
 						const error = data.msg.error_msg;
 						alert(error)

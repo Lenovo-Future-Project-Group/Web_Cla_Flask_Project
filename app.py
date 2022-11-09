@@ -52,35 +52,6 @@ def login():
         }
     }
 
-    # 如果用户名为空，返回错误信息
-    if not username:
-        return_value['status_code'] = 404
-        return_value['msg']['error_msg'] = '用户名不能为空'
-        return return_value
-
-    if not password:
-        return_value['status_code'] = 404
-        return_value['msg']['error_msg'] = '密码不能为空'
-        return return_value
-
-        # 判断密码是否为纯数字
-    if not password.isdigit():
-        return_value['status_code'] = 404
-        return_value['msg']['error_msg'] = '密码必须为纯数字'
-        return return_value
-
-    # 判断用户名是否满足3-8位
-    if len(username) < 3 or len(username) > 8:
-        return_value['status_code'] = 404
-        return_value['msg']['error_msg'] = '用户名长度不符合要求'
-        return return_value
-
-    # 判断密码是否满足4-18位
-    if len(password) < 4 or len(password) > 18:
-        return_value['status_code'] = 404
-        return_value['msg']['error_msg'] = '密码长度不符合要求'
-        return return_value
-
     # 对用户名进行验证
     sql = f'''
     select id from user where username='{username}';
@@ -120,6 +91,43 @@ def reset_pwd():
         return render_template("reset_pwd.html")
     username = request.form.get("username")
     password = request.form.get("password")
+
+    return_value = {
+        'status_code': 200,  # 状态码
+        'msg': {
+            'error_msg': '',  # 错误信息
+        }
+    }
+
+    # 如果用户名为空，返回错误信息
+    if not username:
+        return_value['status_code'] = 404
+        return_value['msg']['error_msg'] = '用户名不能为空'
+        return return_value
+
+    if not password:
+        return_value['status_code'] = 404
+        return_value['msg']['error_msg'] = '密码不能为空'
+        return return_value
+
+        # 判断密码是否为纯数字
+    if not password.isdigit():
+        return_value['status_code'] = 404
+        return_value['msg']['error_msg'] = '密码必须为纯数字'
+        return return_value
+
+    # 判断用户名是否满足3-8位
+    if len(username) < 3 or len(username) > 8:
+        return_value['status_code'] = 404
+        return_value['msg']['error_msg'] = '用户名长度不符合要求'
+        return return_value
+
+    # 判断密码是否满足4-18位
+    if len(password) < 4 or len(password) > 18:
+        return_value['status_code'] = 404
+        return_value['msg']['error_msg'] = '密码长度不符合要求'
+        return return_value
+
     sql = f'''
     update user set password = '{password}' where username = '{username}'
     '''
