@@ -1,14 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang='en'>
 	<head>
-		<meta charset="utf-8">
+		<meta charset='utf-8'>
 		<title></title>
 	</head>
+	
 	<body>
-		<form action="http://127.0.0.1:5000/login" method="POST">
-			username:<input name='username'/> </br>
-			password:<input name='password'/> </br>
-			<button>登陆</button>
-		</form>
+	
+	<form action='#' id='login'>
+		username:<input type='text' placeholder='用户' class='input' id='username'/> <br/>
+		password:<input type='password' placeholder='密码' class='input' id='password'/> <br/>
+		<button class='btn' onclick='validate()'>登录</button>
+	</form>
+	
+	<script type='text/javascript' src='../static/js/jquery-3.3.1.min.js'></script>
+	
+	<script>
+		const fistForm = document.getElementById('login');
+		fistForm.addEventListener('submit', (e) => e.preventDefault());
+	</script>
+
+	<script type='text/javascript'>
+		function validate() {
+			const $username = $('#username');//储存文本框的jQ对象
+			const $password = $('#password');//储存密码框的jQ对象
+			//登录的ajax
+			$.ajax({
+				url: '/login',
+				type: 'POST',
+				data: {username: $username.val(), password: $password.val()},
+				dataType: 'json',
+				success: function (data) {
+					if (data.status_code == '200') {
+						window.location.href = '/index'
+					} else {
+						const error = data.msg.error_msg;
+						alert(error)
+					}
+				},
+			});
+		}
+	</script>
+	
 	</body>
 </html>

@@ -19,7 +19,9 @@ def index():
 @app.route('/show_users')
 def show_users():
     # users = []
-    # sql = 'select username from user'
+    # sql = f'''
+    # select username from user
+    # '''
     # with conn.cursor() as cursor:
     #     cursor.execute(sql)
     #     res = cursor.fetchall()
@@ -63,18 +65,21 @@ def login():
         return return_value
 
     # 对用户名进行验证
-    sql = f"select id from user where username='{username}';"
+    sql = f'''
+    select id from user where username='{username}';
+    '''
     with conn.cursor() as cursor:
         cursor.execute(sql)
         res = cursor.fetchall()  # 获取结果
-        # 如果用户名不存在，则跳转到注册页面
     if not res:
-        # 跳转注册页面
-        pass
-        # return render_template('register.html')
+        return_value['status_code'] = 400
+        return_value['msg']['error_msg'] = '用户名不存在'
+        return return_value
 
     # 如果用户名存在，再对用户名和密码一块进行验证
-    sql = f"select id from user where username='{username}' and password='{password}';"
+    sql = f'''
+    select id from user where username='{username}' and password='{password}';
+    '''
     with conn.cursor() as cursor:
         cursor.execute(sql)
         res = cursor.fetchall()  # 获取结果
@@ -98,7 +103,9 @@ def reset_pwd():
         return render_template("reset_pwd.html")
     username = request.form.get("username")
     password = request.form.get("password")
-    sql = f"update user set password = '{password}' where username = '{username}'"
+    sql = f'''
+    update user set password = '{password}' where username = '{username}'
+    '''
     with conn.cursor() as cursor:
         cursor.execute(sql)
         conn.commit()
@@ -115,14 +122,18 @@ def update_pwd():
     username = request.form.get("username")
     old_password = request.form.get("old_password")
     new_password = request.form.get("new_password")
-    query_sql = f"select * from user where username='{username}' and password='{old_password}';"
+    query_sql = f'''
+    select * from user where username='{username}' and password='{old_password}';
+    '''
     with conn.cursor() as cursor:
         cursor.execute(query_sql)
         res = cursor.fetchall()
         if not res:
             return {"status_code": 404, "msg": "用户名或密码错误，请重试！"}
 
-    sql = f"update user set password='{new_password}' where username = '{username}';"
+    sql = f'''
+    update user set password='{new_password}' where username = '{username}';
+    '''
     with conn.cursor() as cursor:
         cursor.execute(sql)
         conn.commit()
