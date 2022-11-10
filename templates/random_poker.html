@@ -1,23 +1,124 @@
 <!DOCTYPE html>
+<html lang='en'>
 <head>
-    <title>显示抽牌信息</title>
+    <meta charset='UTF-8'>
+    <!-- 引入element-ui CSS -->
+    <link rel='stylesheet' href='../static/css/element.mian.css'>
+    <title></title>
 </head>
 <body>
-<table border="1">
-    <form action='/random_poker' method='POST'>
-        抽牌次数:<label><input name='num'/></label>
-        <button>抽牌</button>
-    </form>
-
-    <tr>
-        <td>抽牌次数</td>
-        <td>抽牌结果</td>
-        <td>抽牌总计</td>
-    </tr>
-    <tr>
-        <td>{{ num }}</td>
-        <td>{{ cards }}</td>
-        <td>{{ score }}</td>
-    </tr>
-</table>
+<style>
+    /** vue需要在引入element-ui之前引入 **/
+    [v-cloak] {
+        display: none;
+    }
+</style>
 </body>
+<!-- vue需要在引入element-ui之前引入 -->
+<script src='../static/js/vue.js'></script>
+<!-- 引入element-ui js -->
+<script src='../static/js/element.mian.js'></script>
+<!-- 引入canvas -->
+<script src='../static/js/v-fit-columns.js'></script>
+
+
+<div id='Main' v-cloak>
+    <div>
+
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+            <el-form-item label="审批人">
+                <el-input v-model="formInline.user" placeholder="审批人"></el-input>
+            </el-form-item>
+            <el-form-item label="活动区域">
+                <el-select v-model="formInline.region" placeholder="活动区域">
+                    <el-option label="区域一" value="shanghai"></el-option>
+                    <el-option label="区域二" value="beijing"></el-option>
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="onSubmit">查询</el-button>
+            </el-form-item>
+        </el-form>
+
+        <el-table :data='tableData' border style='width: 100%'>
+
+            <el-table-column prop='num' label='抽牌次数' width='180'></el-table-column>
+
+            <el-input type='textarea' autosize placeholder='抽牌详情' v-model='textarea'></el-input>
+
+            <el-table-column prop='scores' label='抽牌总分'></el-table-column>
+            <!--
+            <el-table-column label='检查时间'>
+                <template slot-scope='scope'>
+                    <i class='el-icon-time'></i>
+                    <span style='margin-left: 10px'>{[ scope.row.date ]}</span>
+                </template>
+            </el-table-column>
+            -->
+
+            <!--
+            <el-table-column label='操作'>
+                <template slot-scope='scope'>
+                    <el-button
+                            size='mini'
+                            @click='handleEdit(scope.$index, scope.row)'>编辑
+                    </el-button>
+                    <el-button
+                            size='mini'
+                            type='danger'
+                            @click='handleDelete(scope.$index, scope.row)'>删除
+                    </el-button>
+                </template>
+            </el-table-column>
+            -->
+
+        </el-table>
+    </div>
+</div>
+
+<script>
+    const Main = new Vue({
+        el: '#Main',
+        data: {
+            name: 'Hello Flask',
+            tableData: [{
+                // {#num: {{ num }},#}
+                //{#score: {{score['score']}},#}
+                num: 1,
+                score: 1,
+            }],
+            methods: {
+                handleEdit(index, row) {
+                    console.log(index, row);
+                },
+                handleDelete(index, row) {
+                    console.log(index, row);
+                },
+            },
+        },
+        delimiters: ['{[', ']}']
+    })
+
+    const UserFrom = {
+        el: '#UserFrom',
+        data() {
+            return {
+                formInline: {
+                    user: '',
+                    region: ''
+                }
+            }
+        },
+        methods: {
+            onSubmit() {
+                console.log('submit!');
+            }
+        }
+    }
+    const Ctor = Vue.extend(UserFrom)
+    new Ctor().$mount('#Main')
+
+
+</script>
+
+</html>

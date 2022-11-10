@@ -1,0 +1,96 @@
+/** Table 表格样式 **/
+.qgg-table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 2px solid #BDBDBDFF !important;
+    margin-bottom: 20px;
+}
+
+.qgg-table th {
+    border-collapse: collapse;
+    border-right: 2px solid #BDBDBDFF !important;
+    border-bottom: 2px solid #BDBDBDFF !important;
+    background-color: #ffffff !important;
+    padding: 5px 9px;
+    font-size: 28px;
+    font-weight: normal;
+    text-align: center;
+}
+
+.qgg-table caption {
+    font-size: 40px;
+    text-align: center;
+}
+
+.qgg-table td {
+    border-collapse: collapse;
+    border-right: 1px solid #BDBDBDFF !important;
+    border-bottom: 1px solid #BDBDBDFF !important;
+    padding: 5px 9px;
+    font-size: 16px;
+    font-weight: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+/*.qgg-table tr:nth-child(odd) {*/
+/*    background-color:#fff !important;*/
+/*}*/
+
+/*.qgg-table tr:nth-child(even) {*/
+/*    background-color: #f8f8f8 !important;*/
+/*} */
+
+.qgg-table tr:hover {
+    cursor: pointer;
+    background-color: #f8f8f8;
+}
+
+
+/** Table 表格样式 **/
+.qgg-table2 {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #BDBDBDFF !important;
+    margin-bottom: 20px;
+}
+
+.qgg-table2 th {
+    border-collapse: collapse;
+    border-right: 1px solid #BDBDBDFF !important;
+    border-bottom: 1px solid #BDBDBDFF !important;
+    background-color: #ffffff !important;
+    padding: 5px 9px;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+}
+
+.qgg-table2 caption {
+    font-size: 40px;
+    text-align: center;
+}
+
+.qgg-table2 td {
+    border-collapse: collapse;
+    border-right: 1px solid #BDBDBDFF !important;
+    border-bottom: 1px solid #BDBDBDFF !important;
+    padding: 5px 9px;
+    font-size: 16px;
+    font-weight: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+/*.qgg-table tr:nth-child(odd) {*/
+/*    background-color:#fff !important;*/
+/*}*/
+
+/*.qgg-table tr:nth-child(even) {*/
+/*    background-color: #f8f8f8 !important;*/
+/*} */
+
+.qgg-table2 tr:hover {
+    cursor: pointer;
+    background-color: #ababab;
+}

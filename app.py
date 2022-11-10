@@ -13,6 +13,11 @@ conn = pymysql.connect(**st.MYSQL_CONFIG)
 
 @app.route('/')
 def index():
+    return redirect(url_for('random_poker'))
+
+
+@app.route('/hello')
+def hello():
     return 'Hello Flask!'
 
 
@@ -26,8 +31,8 @@ def show_users():
     #     cursor.execute(sql)
     #     res = cursor.fetchall()
     #     [{},{}]
-    users = [{"name": "崔昊元", "age": 17, 'gender': 2}, {"name": "贾靖程", "age": 17, 'gender': 2},
-             {"name": "吕梦丽", "age": 17, 'gender': 2}, {"name": "李蓉轩", "age": 17, 'gender': 2}]
+    users = [{'name': '崔昊元', 'age': 17, 'gender': 2}, {'name': '贾靖程', 'age': 17, 'gender': 2},
+             {'name': '吕梦丽', 'age': 17, 'gender': 2}, {'name': '李蓉轩', 'age': 17, 'gender': 2}]
     return render_template('show_users.html', users=users)
 
 
@@ -73,7 +78,7 @@ def login():
         res = cursor.fetchall()  # 获取结果
     # 如果密码错误
     if not res:
-        # return {"status_code":404, "msg":"密码错误！"}
+        # return {'status_code':404, 'msg':'密码错误！'}
         # 3,2,1,0
         i -= 1
         if i > 0:
@@ -85,12 +90,12 @@ def login():
     return redirect(url_for('show_users'))
 
 
-@app.route('/reset_pwd', methods=["GET", "POST"])
+@app.route('/reset_pwd', methods=['GET', 'POST'])
 def reset_pwd():
-    if request.method == "GET":
-        return render_template("reset_pwd.html")
-    username = request.form.get("username")
-    password = request.form.get("password")
+    if request.method == 'GET':
+        return render_template('reset_pwd.html')
+    username = request.form.get('username')
+    password = request.form.get('password')
 
     return_value = {
         'status_code': 200,  # 状态码
@@ -135,18 +140,18 @@ def reset_pwd():
         cursor.execute(sql)
         conn.commit()
 
-    # return {"status_code":200, "msg":"密码重置成功！"}
+    # return {'status_code':200, 'msg':'密码重置成功！'}
     return redirect(url_for('login'))
 
 
-@app.route('/update_pwd', methods=["GET", "POST"])
+@app.route('/update_pwd', methods=['GET', 'POST'])
 def update_pwd():
-    if request.method == "GET":
-        return render_template("update_pwd.html")
+    if request.method == 'GET':
+        return render_template('update_pwd.html')
 
-    username = request.form.get("username")
-    old_password = request.form.get("old_password")
-    new_password = request.form.get("new_password")
+    username = request.form.get('username')
+    old_password = request.form.get('old_password')
+    new_password = request.form.get('new_password')
     query_sql = f'''
     select * from user where username='{username}' and password='{old_password}';
     '''
@@ -154,7 +159,7 @@ def update_pwd():
         cursor.execute(query_sql)
         res = cursor.fetchall()
         if not res:
-            return {"status_code": 404, "msg": "用户名或密码错误，请重试！"}
+            return {'status_code': 404, 'msg': '用户名或密码错误，请重试！'}
 
     sql = f'''
     update user set password='{new_password}' where username = '{username}';
@@ -163,7 +168,7 @@ def update_pwd():
         cursor.execute(sql)
         conn.commit()
 
-    # return {"status_code":200, "msg":"密码重置成功！"}
+    # return {'status_code':200, 'msg':'密码重置成功！'}
     return redirect(url_for('login'))
 
 
@@ -175,34 +180,68 @@ def random_poker(num=1):
 
     if request.method == 'POST':
         num = request.form.get('num')
-        if num:
-            num = int(num)
-        else:
-            num = 1
 
-    # 逻辑需求
-    # 1. 抽牌过程中，牌不能重复；
-    # 2. 抽到大王/小王，则重新抽牌；
-    # 3. 将每次抽牌的总分数进行统计；
+    return_value = {
+        'status_code': 404,
+        'msg': {
+            'error_msg': '',
+        }
+    }
 
-    # (1. 生成一副牌
-    poker = [f'♥️{_}' for _ in range(1, 14)] + \
-            [f'♠️{_}' for _ in range(1, 14)] + \
-            [f'♦️{_}' for _ in range(1, 14)] + \
-            [f'♣️{_}' for _ in range(1, 14)] + \
-            ['🃏大王', '🃏小王']
+    if not num:
+        return_value['status_code'] = 404
+        return_value['msg']['error_msg'] = '请输入抽牌数量'
+        return return_value
 
-    # (2. 洗牌
+    if not num.isdigit():
+        return_value['status_code'] = 404
+        return_value['msg']['error_msg'] = '抽牌数量必须为纯数字'
+        return return_value
+    else:
+        num = int(num)
+
+    if int(num) > 52:
+        return_value['status_code'] = 404
+        return_value['msg']['error_msg'] = '抽牌数量不能超过52'
+        return return_value
+    else:
+        num = int(num)
+
+    # (1. 生成一副牌 包含 JQK 2-10 A 小王 大王 54张)
+    poker = ['🃏大王'] + \
+            [f'♥️{_}' for _ in range(1, 10)] + \
+            [f'♠️{_}' for _ in range(1, 10)] + \
+            [f'♦️{_}' for _ in range(1, 10)] + \
+            [f'♣️{_}' for _ in range(1, 10)] + \
+            [f'♥️J', f'♥️Q', f'♥️K', f'♥️A'] + \
+            [f'♠️J', f'♠️Q', f'♠️K', f'♠️A'] + \
+            [f'♦️J', f'♦️Q', f'♦️K', f'♦️A'] + \
+            [f'♣️J', f'♣️Q', f'♣️K', f'♣️A'] + \
+            [f'🃏小王']
+
     random.shuffle(poker)
 
-    # (3. 抽牌
-    cards = [poker.pop() if card in ['🃏大王', '🃏小王'] else card for card in [poker.pop() for _ in range(num)]]
+    # (2. 抽到大王/小王，放回去，重新抽牌,直到抽到非大王/小王的牌 为止)
+    cards = []
+    for _ in range(num):
+        while True:
+            card = random.choice(poker)
+            if card not in ['🃏大王', '🃏小王']:
+                break
+        cards.append(card)
 
-    # (4. 计算分数
-    score = sum([int(card[2:]) if card[2:] != '🃏大王' and card[2:] != '🃏小王' else 0 for card in cards])
+    # (4. 将每次抽牌的总分数进行统计) 大小王原分数*2
+    score = {'score': 0, 'J': 11, 'Q': 12, 'K': 13, 'A': 1}
 
-    # (5. 返回结果
-    return render_template('random_poker.html', cards=cards, score=score, num=num)
+    for card in cards:
+        if card == '🃏大王' or card == '🃏小王':
+            score['score'] += int(card[2]) * 2
+        elif card[2] in score:
+            score['score'] += score[card[2]]
+        else:
+            score['score'] += int(card[2])
+
+    return render_template('random_poker.html', num=num, cards=cards, score=score)
 
     # 结果要求：黑桃4，红桃8，红桃KK，大王，总分数为xx
 
